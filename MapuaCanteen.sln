@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0018B5E8-00BB-4C2A-AC0F-DB5D11E7B635}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F95A39F4-4843-463A-AE14-E1FC816C0693}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MapuaCanteen", "src\MapuaCanteen\MapuaCanteen.xproj", "{80480A56-6680-42F2-AD70-451C3BB9D309}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80480A56-6680-42F2-AD70-451C3BB9D309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80480A56-6680-42F2-AD70-451C3BB9D309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80480A56-6680-42F2-AD70-451C3BB9D309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80480A56-6680-42F2-AD70-451C3BB9D309}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{80480A56-6680-42F2-AD70-451C3BB9D309} = {0018B5E8-00BB-4C2A-AC0F-DB5D11E7B635}
+	EndGlobalSection
+EndGlobal
