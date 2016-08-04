@@ -1,0 +1,134 @@
+﻿@model IEnumerable<MapuaCanteen2.Models.Stores.Paotsin>
+@using WebMatrix.Data
+
+@{
+    ViewBag.Title = "Paotsin Store";
+}
+
+@{
+    int i = 1;
+    string[] product = new string[20];
+    string[] image = new string[20];
+    decimal[] prepTime = new decimal[20];
+    decimal[] price = new decimal[20];
+    string[] remarks = new string[20];
+    int[] qty = new int[20];
+
+    var db = Database.Open("MapuaCanteenDBContext");
+
+    if (IsPost)
+    {
+        for (int x = 1; x < 21; x++)
+        {
+            if (Request.Form["quant[" + x + "]"] != null && Int32.Parse(Request.Form["quant[" + x + "]"]) != 0)
+            {
+                qty[x] = Int32.Parse(Request.Form["quant[" + x + "]"]);
+                remarks[x] = Request.Form["sauce[" + x + "]"];
+                product[x] = Request.Form["item[" + x + "]"];
+                image[x] = Request.Form["image[" + x + "]"];
+                prepTime[x] = Decimal.Parse(Request.Form["prepTime[" + x + "]"]);
+                price[x] = Decimal.Parse(Request.Form["price[" + x + "]"]) * qty[x];
+                // Define the insert query. The values to assign to the
+                // columns in the Product table are defined as parameters
+                // with the VALUES keyword.
+                var insertQuery = "IF EXISTS (SELECT * FROM ShoppingCarts WHERE Item=@1 AND Remarks=@5)\n" +
+                    "UPDATE ShoppingCarts SET Quantity = Quantity + @4, Price = Price + @3 WHERE Item=@1 AND Remarks=@5\n" +
+                    "ELSE\n" +
+                    "INSERT INTO ShoppingCarts (Image, Item, PreparationTime, Price, Quantity, Remarks) " +
+                    "VALUES (@0, @1, @2, @3, @4, @5)";
+                db.Execute(insertQuery, image[x], product[x], prepTime[x], price[x], qty[x], remarks[x]);
+            }
+        }
+
+        // Display the page that lists products.
+        Response.Redirect("~/Paotsins/Store");
+    }
+}
+
+<h2 class="text-center" style="font-weight:bolder;">Paotsin Products</h2>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="row">
+            <div class="col-md-9">
+                <h3>
+                    Products offered
+                </h3>
+            </div>
+            <div class="col-md-3">
+                <!-- Controls -->
+                <div class="controls pull-right hidden-xs">
+                    <a class="left glyphicon glyphicon-chevron-left btn btn-success" href="#carousel-example"
+                       data-slide="prev"></a><a class="right glyphicon glyphicon-chevron-right btn btn-success" href="#carousel-example"
+                                                data-slide="next"></a>
+                </div>
+            </div>
+        </div>
+        <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel">
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            <form method="post" action="">
+                                <div class="col-sm-3">
+                                    <div class="col-item">
+                                        <div class="photo imagewrap">
+                                            <img src="@Html.DisplayFor(modelItem => item.Image)" class="img-responsive" alt="a" />
+                                            <input type="hidden" name="image[@i]" value="@item.Image" />
+                                            <div class="input-group pos-bot-left col-md-6">
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[@i]">
+                                                        <span class="glyphicon glyphicon-minus"></span>
+                                                    </a>
+                                                </span>
+                                                <input type="text" name="quant[@i]" class="form-control input-number" value="0" min="0" max="10">
+                                                <span class="input-group-btn">
+                                                    <a class="btn btn-primary btn-number" data-type="plus" data-field="quant[@i]">
+                                                        <span class="glyphicon glyphicon-plus"></span>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="input-group pos-bot-right col-md-6">
+                                                <select class="form-control" name="sauce[@i]">
+                                                    <option>Sweet</option>
+                                                    <option>Spicy</option>
+                                                    <option>Sweet & Spicy</option>
+                                                    <option>Salty & Spicy</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="info">
+                                            <div class="row">
+                                                <div class="price col-md-6">
+                                                    <h5>
+                                                        @Html.DisplayFor(modelItem => item.Item)
+                                                        <input type="hidden" name="item[@i]" value="@item.Item" />
+                                                    </h5>
+                                                    <h5 class="price-text-color">
+                                                        ₱@Html.DisplayFor(modelItem => item.Price)
+                                                        <input type="hidden" name="price[@i]" value="@item.Price" />
+                                                        <input type="hidden" name="prepTime[@i]" value="@item.PreparationTime" />
+                                                    </h5>
+                                                </div>
+                                                <div class="rating hidden-sm col-md-6">
+                                                    <input type="submit" class="btn btn-danger" value="Add to cart" />
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            i++;
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
